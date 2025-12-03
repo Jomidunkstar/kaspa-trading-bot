@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: bot
+      POSTGRES_PASSWORD: bot
+      POSTGRES_DB: kaspa_bot
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  bot:
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      ENVIRONMENT: development
+      POSTGRES_DSN: postgresql://bot:bot@postgres:5432/kaspa_bot
+      REDIS_URL: redis://redis:6379/0
+      KASPA_RPC_URL: http://host.docker.internal:16110
+      KASPA_WS_URL: ws://host.docker.internal:16110/ws
+      KASPA_WALLET_ADDRESS: kaspatest:qp5f0example
+      EXCHANGES: >
+        [
+          {"name":"mexc","api_key":"changeme","secret_key":"changeme"},
+          {"name":"gateio","api_key":"changeme","secret_key":"changeme"}
+        ]
+    ports:
+      - "9300:9300"
+

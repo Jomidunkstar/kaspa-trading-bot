@@ -1,0 +1,13 @@
+aiohttp>=3.10.5
+aioredis>=2.0.1
+asyncpg>=0.29.0
+ccxt>=4.3.35
+httpx>=0.27.0
+prometheus-client>=0.20.0
+pydantic>=2.8.2
+python-dotenv>=1.0.1
+redis>=5.0.8
+structlog>=24.1.0
+tenacity>=9.0.0
+websockets>=12.0
+
